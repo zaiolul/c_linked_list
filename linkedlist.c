@@ -45,7 +45,14 @@ void add(node *head, struct address entry)
 }
 void insert(node *head, struct address entry, int index)
 {
+    
     int size = list_size(*head);
+    if(index > size - 1)
+    {
+        printf("Toks elementas neegzistuoja");
+        return;
+    }
+
     node n = create_node(entry);
     node prev = NULL;
     int i = 0;
@@ -58,10 +65,6 @@ void insert(node *head, struct address entry, int index)
                 n->next = *head;
                 *head = n;  
             } 
-            else if(d->next== NULL)
-            {
-                add(head, entry);
-            }
             else
             {
                 n->next = d;
@@ -105,7 +108,7 @@ void print_list(node head)
     }
 }
 
-
+// TODO: searchai, delete
 int main()
 {
     node head = NULL;
