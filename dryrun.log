@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/zaio/src/c_stuff/c_linked_list'
+make: Leaving directory '/home/zaio/src/c_stuff/c_linked_list'
+ 
+make: *** No targets.  Stop.
+
