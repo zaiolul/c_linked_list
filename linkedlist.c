@@ -1,28 +1,16 @@
-#include <stdio.h>
+#include "includes/data.h"
 #include <stdlib.h>
+#include <stdio.h>
 
-struct address
+node create_node(struct address entry)
 {
-    char* name;
-    char* surname;
-    char* phone;
-    char* email;
-};
+     node n = (node)malloc(sizeof(struct Node));
+     n->next = NULL;
+     n->entry = entry;
+     return n;
+}
 
-struct Node
-{
-    struct Node* next;
-    struct address entry;
-   // int index;
-};
-typedef struct Node *node;
-
-//FUNCTION PROTOTYPES
-node create_node(struct address entry);
-int list_size(node head);
-//-------------------
-
-void add(node *head, struct address entry)
+void list_add(node *head, struct address entry)
 {
     node last = *head;
     node n = create_node(entry);
@@ -30,7 +18,6 @@ void add(node *head, struct address entry)
     if(*head == NULL)
     {
         *head = n;
-        //n->index = 0;
     }
     else
     {
@@ -38,18 +25,16 @@ void add(node *head, struct address entry)
         {
             last = last->next;
         }
-       // n->index = last->index + 1;
         last->next = n;
-        
     }
 }
-void insert(node *head, struct address entry, int index)
+void list_insert(node *head, struct address entry, int index)
 {
     
     int size = list_size(*head);
-    if(index > size - 1)
+    if(index > size - 1 || index < 0)
     {
-        printf("Toks elementas neegzistuoja");
+        printf("Negalimas indeksas");
         return;
     }
 
@@ -69,20 +54,68 @@ void insert(node *head, struct address entry, int index)
             {
                 n->next = d;
                 prev->next = n;
-
             }
-            
         }
-        prev = d;
         i++;
+        prev = d;
     }
 }
-node create_node(struct address entry)
+
+void list_delete_index(node *head, int index)
 {
-     node n = (node)malloc(sizeof(struct Node));
-     n->next = NULL;
-     n->entry = entry;
-     return n;
+    node prev = NULL;
+    
+    int i = 0;
+    for(node d = *head; d != NULL; d = d->next)
+    {
+        if(i == index)
+        {
+            if(d == *head)
+            {
+                node temp;
+                temp = *head;
+                *head = (*head)->next;
+                free(temp);                
+            } 
+            else
+            {
+                prev->next = d->next;
+                free(d);
+            }
+            return;
+        }
+        i++;
+        prev = d;
+    }
+}
+
+void list_clear(node *head)
+{
+    while(*head != NULL)
+    {
+        node temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+}
+
+struct address *list_search_index(node head, int index)
+{
+    if(index < 0 && index > list_size(head) - 1)
+    {
+        return NULL;
+    }
+    int i = 0;
+    struct address *ptr = NULL;
+    for(node d = head; d != NULL; d = d->next)
+    {
+        if(i == index)
+        {
+            ptr = &(d->entry);
+            return ptr;
+        }
+        i ++;
+    }
 }
 int list_size(node head)
 {
@@ -96,47 +129,17 @@ int list_size(node head)
 
 void print_list(node head)
 {
-    node n = head;
     int i = 0;
-    while(n != NULL)
+    for(node d = head; d != NULL; d = d->next)
     {
-        struct address ad = n->entry;
+        struct address ad = d->entry;
         printf("%d %s %s %s %s\n",
             i, ad.name, ad.surname, ad.phone, ad.email);
-        n = n->next;
         i ++; 
     }
-}
-
-// TODO: searchai, delete
-int main()
-{
-    node head = NULL;
-    int n = 10;
-    for(int i = 0; i < n; i ++)
-    {
-        struct address a;
-        a.name = "vardenis";
-        a.surname = "pavardenis";
-        a.phone = "86000";
-        a.email = "varpavar@domain";
-    
-        add(&head,a);
-    }
-   
-    struct address test;
-    test.name = "test";
-    test.surname = "test";
-    test.phone = "test";
-    test.email= "test";
-
-    print_list(head);
-    insert(&head, test, 0);
-    insert(&head, test, 10);
-    insert(&head, test, 5);
     putc('\n', stdout);
-    print_list(head);
-    printf("Done");
-    return 0;
 }
+
+
+
 
