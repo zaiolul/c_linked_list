@@ -1,6 +1,7 @@
 #include "includes/data.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 node create_node(struct address entry)
 {
@@ -117,6 +118,25 @@ struct address *list_search_index(node head, int index)
         i ++;
     }
 }
+
+struct address* list_search_field(node head, char* field)
+{
+   
+    struct address *ptr = NULL;
+    node n = head;
+    while(n != NULL)
+    {
+       
+        if(strcmp(n->entry.name, field) == 0 ||strcmp(n->entry.surname, field) == 0
+        || strcmp(n->entry.phone, field) == 0 || strcmp(n->entry.email, field) == 0)
+        {
+            ptr = &(n->entry);
+        }
+        n = n->next;
+    }
+   
+    return ptr;
+}
 int list_size(node head)
 {
     int count = 0;
@@ -130,12 +150,14 @@ int list_size(node head)
 void print_list(node head)
 {
     int i = 0;
-    for(node d = head; d != NULL; d = d->next)
+    node n = head;
+    while(n != NULL)
     {
-        struct address ad = d->entry;
-        printf("%d %s %s %s %s\n",
+        struct address ad = n->entry;
+        printf("|%d %s %s %s %s|\n",
             i, ad.name, ad.surname, ad.phone, ad.email);
         i ++; 
+        n = n->next;
     }
     putc('\n', stdout);
 }

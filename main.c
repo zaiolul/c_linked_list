@@ -1,20 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include "includes/linkedlist.h"
-
-void remove_endline(char** str, int n)
-{
-    for(int i = n - 1; i > 0; i --)
-    {
-        char x = str[i];
-        if((*str)[i] == '\n')
-        {
-            
-            (*str)[i] = ' ';
-        }
-    }
-}
+int get_input_number(char* text,int rangeMin, int rangeMax);
+void remove_endline(char** str, int n);
+char *get_input_line(char* text, int len);
 
 int main()
 {
@@ -74,69 +63,66 @@ int main()
         //sprintf(a.email, "%d", i);
     
         list_add(&head,a);
-    }
+    }  
    
    
 
-    int len = 100;
-    int charCount;
+  
     int opt;
+    int index;
     char *line;
+    struct address *found;
+
+    int run = 1;
 
     printf("Pradzia\n");
     do
     {
         
-        printf("\n1: ivesti adresa\n");
-        printf("2: istrinti adresa\n");
-        printf("3: ieskoti pagal vieta\n");
-        printf("4: spausdinti visa adresa\n");
-        printf("9: baigti\n");
-    
-        line = (char* )malloc(sizeof(char*) * len);
-        charCount = getline(&line, &len, stdin);
-        remove_endline(&line, charCount);
-
-        printf("INPUT(%d): %s \n", charCount - 1, line);
+        printf("\n----------------------------\n");
+        printf("1: ivesti adresa\n");
+        printf("2: ieskoti pagal vieta\n"); 
+        printf("3: ieskoti pagal lauka (vardas, pavarde, tel. nr arba pastas)\n");
+        printf("4: spausdinti visa adresyna\n");
+        printf("5: istrinti adresa\n");
+        printf("6: istrinti visa adresyna\n");
+        printf("0: baigti\n");
+        printf("----------------------------\n");
         
-        if(charCount - 1 > 1 || (line[0] - '0') == 0)
-        {
-            printf("Netinkamas pasirinkimas: tik 1 skaiciaus simbolis\n");
-            continue;
-        }
-        opt = line[0] - '0';
-       
-        printf("OPT: %d\n", opt);
+    
+        opt = get_input_number(NULL,0, 7);       
+        
         switch(opt)
         {
-            case 9:
+            case 0:
                 printf("Darbas baigtas\n");
-                return 0;
+                run = 0;
+                break;
 
             case 1:
-                printf("Ivesti adreso duomenis (formatas: [vardas] [pavarde] [tel. nr] [pastas])\n");
-
-                line = (char* )malloc(sizeof(char*) * len);
-                charCount = getdelim(&line, &len, '\n', stdin);
-                remove_endline(&line, charCount);
-                puts(line);
+                char *line = get_input_line("Ivesti adreso duomenis (formatas: [vardas] [pavarde] [tel. nr] [pastas])\n", 100);
                 char* words = strtok(line, " ");
 
                 int c = 0;
                 char *parts[4];
-               
+                
+                int failed = 0; //for while below
                 while(words != NULL)
-                {
-                      
+                {    
                     parts[c] = words;
                     words = strtok(NULL," ");
                     c++;
                     if(c > 4)
                     {
                         printf("Netinkamas duomenu formatas (Vardas Pavarde Telefonas Pastas)\n");
-                        continue;
+                        failed = 1;
+                        break;
                     }
-                    
+                }
+                
+                if(failed == 1)
+                {
+                    continue;
                 }
                 struct address ad;
                 
@@ -151,34 +137,109 @@ int main()
                 
                 break;
                 
-            case 3:
-            int size = list_size(head);
-                printf("Ivesti ieskomo adreso vieta (0-%d):\n", size);
-                
-                line = (char* )malloc(sizeof(char*) * len);
+            case 2:
 
-                charCount = getdelim(&line, &len, '\n', stdin);
-               
-                if(charCount - 1 > 1 || line[0] - '0' > size - 1)
+                index = get_input_number("Ivesti ieskomo adreso vieta", 0, list_size(head) - 1);
+                if(index == -1)
                 {
-                    printf("Netinkamas pasirinkimas: tik 1  skaiciaus simbolis\n");
                     continue;
                 }
-                int index = line[0] - '0';
                 struct address *found = list_search_index(head, index);
              
-                fflush(stdout);
-                printf("%d vietoje esantis irasas:\n \"%s %s %s %s\"\n", index, found->name, found->surname, found->phone, found->email);
+                
+                printf("%d-oje vietoje esantis irasas:\n \"%s %s %s %s\"\n", index, found->name, found->surname, found->phone, found->email);
                 break;                 
 
+            case 3:
+                line = get_input_line("Lauko reiksme (vardas, pavarde, telefonas arba pastas):", 100);
+                found = list_search_field(head, line);
+                if(found != NULL)
+                {
+                    printf("Rastas irasas:\n \"%s %s %s %s\"\n", index, found->name, found->surname, found->phone, found->email);
+                }
+                else
+                {
+                    printf("Irasas nerastas.\n");
+                }
+                
+                break;
 
             case 4:
-                printf("Visas sarasas:\n");
-                print_list(head);
-               
+                if(list_size(head) == 0)
+                {
+                    printf("Sarasas tuscias.\n");
+                }
+                else
+                {
+                    printf("Visas sarasas:\n");
+                    print_list(head);
+                }
+                break;
+            
+            case 5:
+                index = get_input_number("Ivesti norimo istrinti adreso vieta", 0, list_size(head) - 1);
+                if(index == -1)
+                {
+                    continue;
+                }
+
+                list_delete_index(&head, index);
+                printf("Elementas sekmingai istrintas.\n");
+                break;
+
+            case 6:
+                list_clear(&head);
+                printf("Sarasas sekmingai isvalytas.\n");
+                break;
         }   
-        
+        fflush(stdout);
     }
-    while(1);
+    while(run);
     return 0;
+}
+
+void remove_endline(char** str, int n)
+{
+    for(int i = n - 1; i > 0; i --)
+    {
+        char x = (*str)[i];
+        if((*str)[i] == '\n')
+        {
+            
+            (*str)[i] = ' ';
+        }
+    }
+}
+
+int get_input_number(char* text,int rangeMin, int rangeMax)
+{
+    if(text != NULL)
+    {
+        printf("%s [%d-%d]:\n", text,rangeMin, rangeMax);
+    }
+
+    char *line = get_input_line(text,1);
+
+    int index = atoi(line);
+    free(line);
+    if(index < 0 || index > rangeMax)
+    {
+        printf("Bloga ivestis: galimi tik skaiciai intervale [%d-%d]\n", rangeMin, rangeMax);
+        return -1;
+    }
+   
+    
+    return index;
+}
+char *get_input_line(char* text, int len)
+{
+    if(text != NULL)
+    {
+        printf("%s \n", text);
+    }
+    printf("> ");
+    char *line = (char* )malloc(sizeof(char*) * len);
+    int charCount = getdelim(&line, &len, '\n', stdin);
+    remove_endline(&line, charCount);
+    return line;
 }
