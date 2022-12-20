@@ -121,7 +121,6 @@ struct address *list_search_index(node head, int index)
 
 struct address* list_search_field(node head, char* field)
 {
-   
     struct address *ptr = NULL;
     node n = head;
     while(n != NULL)
@@ -131,11 +130,12 @@ struct address* list_search_field(node head, char* field)
         || strcmp(n->entry.phone, field) == 0 || strcmp(n->entry.email, field) == 0)
         {
             ptr = &(n->entry);
+            return ptr;
         }
         n = n->next;
     }
    
-    return ptr;
+    return NULL;
 }
 int list_size(node head)
 {
@@ -154,7 +154,7 @@ void print_list(node head)
     while(n != NULL)
     {
         struct address ad = n->entry;
-        printf("|%d %s %s %s %s|\n",
+        printf("%d: %s %s %s %s\n",
             i, ad.name, ad.surname, ad.phone, ad.email);
         i ++; 
         n = n->next;
