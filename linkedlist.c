@@ -10,7 +10,7 @@ node create_node(struct address entry)
      n->entry = entry;
      return n;
 }
-/*adds node with data ENTRY to HEAD*/
+/*adds node with data ENTRY to list starting with HEAD*/
 void list_add(node *head, struct address entry)
 {
     node last = *head;
@@ -29,6 +29,7 @@ void list_add(node *head, struct address entry)
         last->next = n;
     }
 }
+/*Inserts a node with data ENTRY at INDEX in a list starting with HEAD*/
 void list_insert(node *head, struct address entry, int index)
 {
     
@@ -62,6 +63,7 @@ void list_insert(node *head, struct address entry, int index)
         prev = d;
     }
 }
+/*Frees memory of node's N data*/
 void delete_entry(node n)
 {
     free(n->entry.name);
@@ -69,6 +71,7 @@ void delete_entry(node n)
     free(n->entry.phone);
     free(n->entry.email);
 }
+/*Removes a node from list at INDEX*/
 void list_delete_index(node *head, int index)
 {
     node prev = NULL;
@@ -98,7 +101,7 @@ void list_delete_index(node *head, int index)
         prev = d;
     }
 }
-
+/*Removes all nodes from list*/
 void list_clear(node *head)
 {
     while(*head != NULL)
@@ -109,7 +112,7 @@ void list_clear(node *head)
         free(temp);
     }
 }
-
+/*Searches for entry in list at INDEX*/
 struct address *list_search_index(node head, int index)
 {
     if(index < 0 && index > list_size(head) - 1)
@@ -128,7 +131,7 @@ struct address *list_search_index(node head, int index)
         i ++;
     }
 }
-
+/*Searches for entry in list by FIELD*/
 struct address* list_search_field(node head, char* field)
 {
     struct address *ptr = NULL;
@@ -147,6 +150,7 @@ struct address* list_search_field(node head, char* field)
    
     return NULL;
 }
+/*Gets the size of list*/
 int list_size(node head)
 {
     int count = 0;
@@ -156,7 +160,7 @@ int list_size(node head)
     }
     return count;
 }
-
+/*Prints the list to stdout*/
 void print_list(node head)
 {
     int i = 0;

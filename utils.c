@@ -3,7 +3,7 @@
 #include "includes/data.h"
 
 /*Checks if STR contains only integer characters*/
-int check_number(const char* str)
+int check_number(char* str)
 {
     char* temp = str;
     while(*temp != '\0')
@@ -18,7 +18,7 @@ int check_number(const char* str)
 }
 
 /*Remove all endline characters from STR*/
-void remove_endline(char** str, const int n)
+void remove_endline(char** str, int n)
 {
     for(int i = n - 1; i > 0; i --)
     {
@@ -32,7 +32,7 @@ void remove_endline(char** str, const int n)
 }
 
 /*Gets input of length LEN frothe number value of itm stdin, prints TEXT to stdout*/
-char *get_input_line(const char* text, const int len)
+char *get_input_line(char* text, int len)
 {
     if(text != NULL)
     {
