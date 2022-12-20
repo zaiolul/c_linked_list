@@ -1,6 +1,6 @@
 CC = gcc
 #CFLAGS = -g -Wall -pedantic -Wextra
-
+CFLAGS = -w
 AddressBook: main.o linkedlist.o utils.o
 	gcc main.o linkedlist.o utils.o -o AddressBook
 
