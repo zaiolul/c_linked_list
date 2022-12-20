@@ -10,6 +10,5 @@ struct Node
 {
     struct Node* next;
     struct address entry;
-   // int index;
 };
 typedef struct Node *node;

@@ -2,69 +2,22 @@
 #include <stdio.h>
 #include "includes/linkedlist.h"
 #include "includes/utils.h"
+void load_start_entries(node* head);
+
 
 int main()
 {
-    char* names[] = {"ezglasbcxb",
-                    "wkpbhioemx",
-                    "pnfoaichrj",
-                    "twzcdvaxgc",
-                    "btteeughrs",
-                    "rkgcgbsoag",
-                    "yfbvjaoxat",
-                    "jbpcuksyjj",
-                    "fzogbodtbi",
-                    "abc"};
-    char* surnames[] = {"ezglasbcxb",
-                    "wkpbhioemx",
-                    "pnfoaichrj",
-                    "twzcdvaxgc",
-                    "btteeughrs",
-                    "rkgcgbsoag",
-                    "yfbvjaoxat",
-                    "jbpcuksyjj",
-                    "fzogbodtbi",
-                    "def"};
-    char* phones[] = {"564877830",
-                    "755581126",
-                    "531614666",
-                    "814173637",
-                    "892200388",
-                    "547572403",
-                    "813277950",
-                    "116455191",
-                    "113166087",
-                    "123"};
-    char* emails[] = {"@564877830",
-                    "@755581126",
-                    "@531614666",
-                    "@814173637",
-                    "@892200388",
-                    "@547572403",
-                    "@813277950",
-                    "@116455191",
-                    "@113166087",
-                    "@email"};
     node head = NULL;
-    int n = 10;
+    load_start_entries(&head);
 
-    for(int i = 0; i < n; i ++)
-    {
-        struct address a;
-        a.name = names[i];
-        a.surname = surnames[i];
-        a.phone = phones[i];
-        a.email = emails[i];
-        list_add(&head,a);
-    }  
-   
-    int opt;
-    int index;
-    char *line;
-    struct address *found;
-
+    int opt; //current chosen option
+    int index; //index of found entry 
+    char *line; // input line
+    struct address *found; //found entry 
+    struct address ad; // new entry to add/insert
+    int size; //address size
+    int status; //var for function return result
     int run = 1;
-
     printf("---------Pradžia---------\n");
 
     do
@@ -72,16 +25,18 @@ int main()
         
         printf("\n----------------------------\n");
         printf("1: Įvesti adresą\n");
-        printf("2: Ieškoti pagal vietą\n"); 
-        printf("3: Ieškoti pagal lauką (vardas, pavardė, tel. nr arba paštas)\n");
-        printf("4: Spausdinti visą adresyną\n");
-        printf("5: ištrinti adresą\n");
-        printf("6: ištrinti visą adresyną\n");
+        printf("2: Įterpti adresą\n");
+        printf("3: Ieškoti pagal vietą\n"); 
+        printf("4: Ieškoti pagal lauką (vardas, pavardė, tel. nr arba paštas)\n");
+        printf("5: Spausdinti visą adresyną\n");
+        printf("6: Ištrinti adresą\n");
+        printf("7: Ištrinti visą adresyną\n");
         printf("0: Baigti darbą\n");
         printf("----------------------------\n");
     
         opt = get_input_number(NULL,0, 7);       
-        
+        size = list_size(head);
+
         switch(opt)
         {
             case 0:
@@ -90,46 +45,45 @@ int main()
                 break;
 
             case 1:
-                char *line = get_input_line("Įvesti adreso duomenis (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n", 100);
-                char* words = strtok(line, " ");
+                line = get_input_line("Įvesti adreso duomenis (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n", 100);
+                ad;
 
-                int c = 0;
-                char *parts[4];
-                
-                int failed = 0; //for while below
-                while(words != NULL)
-                {    
-                    parts[c] = words;
-                    words = strtok(NULL," ");
-                    c++;
-                    if(c > 4)
-                    {
-                    printf("Netinkamas duomenų formatas (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n");
-                        failed = 1;
-                        break;
-                    }
+                status = create_entry(line, &ad);
+                if(status < 0)
+                {
+                    break;
                 }
                 
-                if(failed == 1)
+                list_add(&head, ad);
+                free(line);
+                printf("Adresas pridėtas.\n");
+
+                break;
+
+            case 2:
+                index = get_input_number("Įterpimo vieta:", 0, list_size(head) - 1);
+                if(index == -1)
                 {
                     continue;
                 }
-                struct address ad;
-                
-                ad.name = parts[0];
-                ad.surname = parts[1];
-                ad.phone = parts[2];
-                ad.email = parts[3];
-            
-                //printf("Ivestas: %s %s %s %s\n", ad.name, ad.surname, ad.phone, ad.email);
-                list_add(&head, ad);
-                
-                
-                break;
-                
-            case 2:
+                line = get_input_line("Įvesti adreso duomenis (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n", 100);
 
-                index = get_input_number("Įvesti ieškomo adreso vietą", 0, list_size(head) - 1);
+                
+                status = create_entry(line, &ad);
+
+                if(status < 0)
+                {
+                    break;
+                }
+
+                list_insert(&head, ad, index);
+                printf("Adresas įterptas.");
+                free(line);
+                break;
+
+            case 3:
+
+                index = get_input_number("Įvesti ieškomo adreso vietą:", 0, list_size(head) - 1);
                 if(index == -1)
                 {
                     continue;
@@ -140,7 +94,7 @@ int main()
 
                 break;                 
 
-            case 3:
+            case 4:
                 line = get_input_line("Lauko reikšme (vardas, pavardė, telefonas arba paštas):", 100);
                 found = list_search_field(head, line);
                 if(found != NULL)
@@ -155,8 +109,8 @@ int main()
                 
                 break;
 
-            case 4:
-                if(list_size(head) == 0)
+            case 5:
+                if(size == 0)
                 {
                     printf("Sąrašas tuščias.\n");
                 }
@@ -167,8 +121,14 @@ int main()
                 }
                 break;
             
-            case 5:
-                index = get_input_number("Įvesti norimo ištrinti adreso vietą", 0, list_size(head) - 1);
+            case 6:
+                
+                if(size == 0)
+                {
+                    printf("Sąrašas tuščias");
+                    continue;
+                }
+                index = get_input_number("Įvesti norimo ištrinti adreso vietą", 0, size - 1);
                 if(index == -1)
                 {
                     continue;
@@ -179,14 +139,53 @@ int main()
 
                 break;
 
-            case 6:
+            case 7:
+                if(size == 0)
+                {
+                    printf("Sąrašas tuščias");
+                    continue;
+                }
                 list_clear(&head);
                 printf("Sąrašas sėkmingai išvalytas.\n");
 
                 break;
-        }   
+        }
         fflush(stdout);
     }
     while(run);
+    list_clear(&head);
+    free(head);
+   
     return 0;
+}
+/*Fill up address book with 10 entries. Just filler data.*/
+void load_start_entries(node* head)
+{
+  
+   
+    for(int i = 0; i < 10; i ++)
+    {
+        char* name = (char*) malloc(sizeof(char)*10);
+        char* surname = (char*) malloc(sizeof(char)*10);
+        char* phone = (char*) malloc(sizeof(char)*10);
+        char* email = (char*) malloc(sizeof(char)*10);
+
+        strcpy(name, "Varx");
+        strcpy(surname, "Pavx");
+        strcpy(phone, "86x");
+        strcpy(email, "mail@x");
+
+        name[3] = i + '0';
+        surname[3] = i + '0';
+        phone[2] = i + '0';
+        email[5] = i + '0';
+        struct address ad = 
+        {
+            ad.name = name,
+            ad.surname = surname,
+            ad.phone = phone,
+            ad.email = email
+        };
+        list_add(head, ad);
+    }
 }

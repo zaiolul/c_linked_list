@@ -1,7 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "includes/data.h"
 
-void remove_endline(char** str, int n)
+/*Checks if STR contains only integer characters*/
+int check_number(const char* str)
+{
+    char* temp = str;
+    while(*temp != '\0')
+    {
+        if(*temp > 57 || *temp < 48 )
+        {
+            return -1;
+        }
+        temp++;
+    }
+    return 0;
+}
+
+/*Remove all endline characters from STR*/
+void remove_endline(char** str, const int n)
 {
     for(int i = n - 1; i > 0; i --)
     {
@@ -14,7 +31,8 @@ void remove_endline(char** str, int n)
     }
 }
 
-char *get_input_line(char* text, int len)
+/*Gets input of length LEN frothe number value of itm stdin, prints TEXT to stdout*/
+char *get_input_line(const char* text, const int len)
 {
     if(text != NULL)
     {
@@ -36,14 +54,15 @@ char *get_input_line(char* text, int len)
     return line;
 }
 
-int get_input_number(char* text,int rangeMin, int rangeMax)
+/*Gets input from stdin and transforms it to a number, prints TEXT to stdout*/
+int get_input_number(const char* text,const int rangeMin,const int rangeMax)
 {
     if(text != NULL)
     {
         printf("%s [%d-%d]:\n", text,rangeMin, rangeMax);
     }
     
-    char *line = get_input_line(text,100);
+    char *line = get_input_line(NULL,100);
     
     int check = check_number(line) ;
     int index = atoi(line);
@@ -56,17 +75,36 @@ int get_input_number(char* text,int rangeMin, int rangeMax)
     
     return index;
 }
-
-int check_number(char* str)
+/*Inserts data to ENTRY from INPUT*/
+int create_entry(char* input, struct address *entry)
 {
-    char* temp = str;
-    while(*temp != '\0')
+    int c = 0;
+    char *parts[4];
+    for(int i = 0; i < 4; i ++)
     {
-        if(*temp > 57 || *temp < 48 )
-        {
-            return -1;
-        }
-        temp++;
+        parts[i] = (char*) malloc(sizeof(char*) * 30);
     }
+
+    char* part = strtok(input, " ");
+    while(part != NULL)
+    {    
+        strcpy(parts[c], part);
+        part = strtok(NULL," ");
+        c++;
+    }
+    if(c != 4)
+    {
+        printf("Netinkamas duomenų formatas (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n");
+        for(int i = 0; i < 4; i ++)
+        {
+            free(parts[i]);
+        }
+        return -1;
+    }
+    entry->name = parts[0];
+    entry->surname = parts[1];
+    entry->phone = parts[2];
+    entry->email = parts[3];
+    
     return 0;
 }
