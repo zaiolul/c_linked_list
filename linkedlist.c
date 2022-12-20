@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+/*Creates a node with ENTRY as data*/
 node create_node(struct address entry)
 {
      node n = (node)malloc(sizeof(struct Node));
@@ -10,7 +10,7 @@ node create_node(struct address entry)
      n->entry = entry;
      return n;
 }
-
+/*adds node with data ENTRY to HEAD*/
 void list_add(node *head, struct address entry)
 {
     node last = *head;
@@ -56,12 +56,19 @@ void list_insert(node *head, struct address entry, int index)
                 n->next = d;
                 prev->next = n;
             }
+            break;
         }
         i++;
         prev = d;
     }
 }
-
+void delete_entry(node n)
+{
+    free(n->entry.name);
+    free(n->entry.surname);
+    free(n->entry.phone);
+    free(n->entry.email);
+}
 void list_delete_index(node *head, int index)
 {
     node prev = NULL;
@@ -76,12 +83,14 @@ void list_delete_index(node *head, int index)
                 node temp;
                 temp = *head;
                 *head = (*head)->next;
-                free(temp);                
+                delete_entry(temp);     
+                free(temp);     
             } 
             else
             {
                 prev->next = d->next;
-                free(d);
+                delete_entry(d);
+                free(d);     
             }
             return;
         }
@@ -96,6 +105,7 @@ void list_clear(node *head)
     {
         node temp = *head;
         *head = (*head)->next;
+        delete_entry(temp); 
         free(temp);
     }
 }
