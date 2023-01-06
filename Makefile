@@ -15,4 +15,4 @@ utils.o: utils.c
 	gcc -c utils.c
 
 clean:
-	rm linkedlist.o main.o utils.o
+	rm linkedlist.o main.o utils.o 
