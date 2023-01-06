@@ -1,24 +1,30 @@
-#include "includes/data.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-/*Creates a node with ENTRY as data*/
-node create_node(struct address entry)
+#include "includes/data.h"
+
+/*Creates a node with NAME, SURNAME, PHONE, EMAIL*/
+node create_node(char name[], char surname[], char phone[], char email[])
 {
      node n = (node)malloc(sizeof(struct Node));
      n->next = NULL;
-     n->entry = entry;
+     strncpy(n->name, name, 30);
+     strncpy(n->surname, surname, 30);
+     strncpy(n->phone, phone, 30);
+     strncpy(n->email, email, 50);
+    
      return n;
 }
-/*adds node with data ENTRY to list starting with HEAD*/
-void list_add(node *head, struct address entry)
+/*adds node ENTRY to list starting with HEAD*/
+void list_add(node *head, node entry)
 {
     node last = *head;
-    node n = create_node(entry);
+   
    
     if(*head == NULL)
     {
-        *head = n;
+        *head = entry;
     }
     else
     {
@@ -26,11 +32,11 @@ void list_add(node *head, struct address entry)
         {
             last = last->next;
         }
-        last->next = n;
+        last->next = entry;
     }
 }
-/*Inserts a node with data ENTRY at INDEX in a list starting with HEAD*/
-void list_insert(node *head, struct address entry, int index)
+/*Inserts a node ENTRY at INDEX in a list starting with HEAD*/
+void list_insert(node *head, node entry, int index)
 {
     
     int size = list_size(*head);
@@ -40,7 +46,7 @@ void list_insert(node *head, struct address entry, int index)
         return;
     }
 
-    node n = create_node(entry);
+
     node prev = NULL;
     int i = 0;
     for(node d = *head; d != NULL; d = d->next)
@@ -49,13 +55,13 @@ void list_insert(node *head, struct address entry, int index)
         {
             if(d == *head)
             {
-                n->next = *head;
-                *head = n;  
+                entry->next = *head;
+                *head = entry;  
             } 
             else
             {
-                n->next = d;
-                prev->next = n;
+                entry->next = d;
+                prev->next = entry;
             }
             break;
         }
@@ -63,14 +69,7 @@ void list_insert(node *head, struct address entry, int index)
         prev = d;
     }
 }
-/*Frees memory of node's N data*/
-void delete_entry(node n)
-{
-    free(n->entry.name);
-    free(n->entry.surname);
-    free(n->entry.phone);
-    free(n->entry.email);
-}
+
 /*Removes a node from list at INDEX*/
 void list_delete_index(node *head, int index)
 {
@@ -85,14 +84,12 @@ void list_delete_index(node *head, int index)
             {
                 node temp;
                 temp = *head;
-                *head = (*head)->next;
-                delete_entry(temp);     
+                *head = (*head)->next;   
                 free(temp);     
             } 
             else
             {
                 prev->next = d->next;
-                delete_entry(d);
                 free(d);     
             }
             return;
@@ -108,42 +105,40 @@ void list_clear(node *head)
     {
         node temp = *head;
         *head = (*head)->next;
-        delete_entry(temp); 
         free(temp);
     }
 }
-/*Searches for entry in list at INDEX*/
-struct address *list_search_index(node head, int index)
+/*Searches for node in list at INDEX*/
+node list_search_index(node head, int index)
 {
     if(index < 0 && index > list_size(head) - 1)
     {
         return NULL;
     }
     int i = 0;
-    struct address *ptr = NULL;
+   
+
     for(node d = head; d != NULL; d = d->next)
     {
         if(i == index)
         {
-            ptr = &(d->entry);
-            return ptr;
+            return d;
         }
         i ++;
     }
 }
-/*Searches for entry in list by FIELD*/
-struct address* list_search_field(node head, char* field)
+/*Searches for node in list by FIELD*/
+node list_search_field(node head, char* field)
 {
-    struct address *ptr = NULL;
+    node ptr = NULL;
     node n = head;
     while(n != NULL)
     {
        
-        if(strcmp(n->entry.name, field) == 0 ||strcmp(n->entry.surname, field) == 0
-        || strcmp(n->entry.phone, field) == 0 || strcmp(n->entry.email, field) == 0)
+        if(strcmp(n->name, field) == 0 ||strcmp(n->surname, field) == 0
+        || strcmp(n->phone, field) == 0 || strcmp(n->email, field) == 0)
         {
-            ptr = &(n->entry);
-            return ptr;
+            return n;
         }
         n = n->next;
     }
@@ -167,9 +162,9 @@ void print_list(node head)
     node n = head;
     while(n != NULL)
     {
-        struct address ad = n->entry;
+       
         printf("%d: %s %s %s %s\n",
-            i, ad.name, ad.surname, ad.phone, ad.email);
+            i, n->name, n->surname, n->phone, n->email);
         i ++; 
         n = n->next;
     }
