@@ -2,6 +2,8 @@ CC = gcc
 #CFLAGS = -g -Wall -pedantic -Wextra
 CFLAGS = -w
 
+all: utils.o linkedlist.o main.o AddressBook
+	
 AddressBook: main.o linkedlist.o utils.o
 	gcc main.o linkedlist.o utils.o -o AddressBook
 
@@ -15,4 +17,4 @@ utils.o: utils.c
 	gcc -c utils.c
 
 clean:
-	rm linkedlist.o main.o utils.o 
+	rm linkedlist.o main.o utils.o AddressBook

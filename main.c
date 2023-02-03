@@ -33,9 +33,7 @@ int main()
                 break;
 
             case 3:
-
                 get_pos(head);
-
                 break;                 
 
             case 4:
@@ -58,7 +56,6 @@ int main()
         fflush(stdout);
     }
     while(run);
-    //list_clear(&head);
     free(head);
    
     return 0;

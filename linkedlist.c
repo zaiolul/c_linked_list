@@ -4,7 +4,7 @@
 #include <string.h>
 #include "includes/data.h"
 
-/*Creates a node with NAME, SURNAME, PHONE, EMAIL*/
+/*Creates a node with NAME, SURNAME, PHONE, EMAIL as data*/
 node create_node(char name[], char surname[], char phone[], char email[])
 {
      node n = (node)malloc(sizeof(struct Node));
