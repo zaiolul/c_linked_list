@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../includes/linkedlist.h"
+#include <string.h>
 
 /*Checks if STR contains only integer characters*/
 int check_number(char *str)
@@ -19,7 +20,6 @@ int check_number(char *str)
 void remove_endline(char **str, int n)
 {
 	for (int i = n - 1; i > 0; i--) {
-		char x = (*str)[i];
 		if ((*str)[i] == '\n') {
 			(*str)[i] = '\0';
 		}
@@ -88,8 +88,7 @@ int create_entry(char *input, node *entry)
 		printf("Netinkamas duomenų formatas (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n");
 		return -1;
 	}
-	node n = create_node(parts[0], parts[1], parts[2], parts[3]);
-
+	
 	*entry = create_node(parts[0], parts[1], parts[2], parts[3]);
 
 	return 0;

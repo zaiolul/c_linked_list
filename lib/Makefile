@@ -1,12 +1,15 @@
-CC = gcc
-CFLAGS = -g -Wall -pedantic -Wextra
+LIB:=liblinkedlist.so
+SRCS:=$(wildcard *.c)
+OBJS:=$(SRCS:.c=.o)
+CFLAGS:=-Wall -fpic
+LDFLAGS:=-shared
 
-all: liblinkedlist.so
+.PHONY: all clean
 
-liblinkedlist.so: linkedlist.c ../includes/data.h
-	gcc -c -fPIC linkedlist.c
-	gcc -shared -o liblinkedlist.so linkedlist.o
+all: $(LIB)
+
+$(LIB): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 	
 clean:
-	rm liblinkedlist.so
-	rm linkedlist.o
+	$(RM) $(LIB) $(OBJS)

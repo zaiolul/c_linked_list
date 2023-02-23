@@ -30,6 +30,16 @@ void list_add(node *head, node entry)
 		last->next = entry;
 	}
 }
+
+/*Gets the size of list*/
+int list_size(node head)
+{
+	int count = 0;
+	for (node d = head; d != NULL; d = d->next) {
+		count++;
+	}
+	return count;
+}
 /*Inserts a node ENTRY at INDEX in a list starting with HEAD*/
 void list_insert(node *head, node entry, int index)
 {
@@ -40,7 +50,7 @@ void list_insert(node *head, node entry, int index)
 	}
 
 	node prev = NULL;
-	int i = 0;
+	int i	  = 0;
 	for (node d = *head; d != NULL; d = d->next) {
 		if (i == index) {
 			if (d == *head) {
@@ -92,6 +102,7 @@ void list_clear(node *head)
 /*Searches for node in list at INDEX*/
 node list_search_index(node head, int index)
 {
+	node n = NULL;
 	if (index < 0 && index > list_size(head) - 1) {
 		return NULL;
 	}
@@ -103,11 +114,11 @@ node list_search_index(node head, int index)
 		}
 		i++;
 	}
+	return n;
 }
 /*Searches for node in list by FIELD*/
 node list_search_field(node head, char *field)
 {
-	node ptr = NULL;
 	node n	 = head;
 	while (n != NULL) {
 		if (strcmp(n->name, field) == 0 || strcmp(n->surname, field) == 0 ||
@@ -119,15 +130,7 @@ node list_search_field(node head, char *field)
 
 	return NULL;
 }
-/*Gets the size of list*/
-int list_size(node head)
-{
-	int count = 0;
-	for (node d = head; d != NULL; d = d->next) {
-		count++;
-	}
-	return count;
-}
+
 /*Prints the list to stdout*/
 void print_list(node head)
 {

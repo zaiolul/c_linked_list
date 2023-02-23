@@ -1,15 +1,17 @@
-CC = gcc
-CFLAGS = -g -Wall -pedantic -Wextra
+.PHONY: all clean lib src
 
-all: AddressBook
+all: lib src
 
-AddressBook: 
+lib: 
 	$(MAKE) -C lib
+
+src: lib
 	$(MAKE) -C src
-	gcc -L${CURDIR}/lib -Wl,-rpath=${CURDIR}/lib -llinkedlist src/main.o src/utils.o -o AddressBook 
+
+clean: clean-lib clean-src
 	
-	
-clean:
+clean-lib:
 	$(MAKE) clean -C lib
+
+clean-src:
 	$(MAKE) clean -C src
-	rm AddressBook
