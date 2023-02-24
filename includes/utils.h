@@ -1,3 +1,5 @@
+#ifndef UTILS_H
+#define UTILS_H
 
 void remove_endline(char** str, int n);
 int get_input_number(char* text, int rangeMin, int rangeMax);
@@ -12,3 +14,6 @@ void get_pos(node head);
 void get_field(node head);
 void print_all(node head);
 void load_start_entries(node* head);
+void print_usage();
+
+#endif

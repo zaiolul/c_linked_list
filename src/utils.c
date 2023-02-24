@@ -159,10 +159,16 @@ void get_pos(node head)
 void get_field(node head)
 {
 	char *line = get_input_line("Lauko reikšme (vardas, pavardė, telefonas arba paštas):", 100);
-	node found = list_search_field(head, line);
-	if (found != NULL) {
-		printf("Rastas įrašas:\n \"%s %s %s %s\"\n", found->name, found->surname, found->phone,
-		       found->email);
+	node found[list_size(head)];
+	int count = list_search_field(found, head, line);
+	
+	if (count > 0) {
+		printf("Rasti įrašai:\n");
+		for(int i = 0; i < count; i ++){
+			printf("\"%s %s %s %s\"\n", found[i]->name, found[i]->surname, found[i]->phone,
+		       found[i]->email);
+		}
+		
 	} else {
 		printf("Įrašas nerastas.\n");
 	}

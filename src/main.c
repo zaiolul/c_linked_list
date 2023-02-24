@@ -12,9 +12,11 @@ int main()
 	int run = 1;
 
 	printf("---------Pradžia---------\n");
-
+	
 	do {
+		print_usage();
 		opt = get_input_number(NULL, 0, 7);
+		
 		switch (opt) {
 		case 0:
 			printf("--------Darbas baigtas--------\n");
