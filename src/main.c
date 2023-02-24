@@ -1,15 +1,21 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <signal.h>
+#include <unistd.h>
 #include "../includes/linkedlist.h"
 #include "../includes/utils.h"
 
+void sig_handler(int signum);
+
+int run = 1;
+
 int main()
 {
+	signal(SIGINT, sig_handler);
 	node head = NULL;
 	load_start_entries(&head);
 
 	int opt; //current chosen option
-	int run = 1;
 
 	printf("---------Pradžia---------\n");
 	
@@ -54,7 +60,13 @@ int main()
 		}
 		fflush(stdout);
 	} while (run);
-	free(head);
+	list_clear(&head);
+
+	
 
 	return 0;
+}
+void sig_handler(int signum)
+{
+	run = 0;
 }
