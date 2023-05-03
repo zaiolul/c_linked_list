@@ -9,11 +9,11 @@ int check_number(char *str)
 	char *temp = str;
 	while (*temp != '\0') {
 		if (*temp > 57 || *temp < 48) {
-			return -1;
+			return 0;
 		}
 		temp++;
 	}
-	return 0;
+	return 1;
 }
 
 /*Remove all endline characters from STR*/
@@ -66,7 +66,7 @@ int get_input_number(char *text, int rangeMin, int rangeMax)
 
 	return index;
 }
-/*Inserts data to ENTRY from INPUT*/
+// /*Inserts data to ENTRY from INPUT*/
 int create_entry(char *input, node *entry)
 {
 	int c = 0;

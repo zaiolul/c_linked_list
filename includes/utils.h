@@ -1,6 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
-
+#include "linkedlist.h"
 void remove_endline(char** str, int n);
 int get_input_number(char* text, int rangeMin, int rangeMax);
 char *get_input_line(char* text, int len);
