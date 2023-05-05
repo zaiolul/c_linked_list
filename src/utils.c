@@ -1,51 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../includes/linkedlist.h"
+#include "../includes/io_utils.h"
 #include <string.h>
-
-/*Checks if STR contains only integer characters*/
-int check_number(char *str)
-{
-	char *temp = str;
-	while (*temp != '\0') {
-		if (*temp > 57 || *temp < 48) {
-			return 0;
-		}
-		temp++;
-	}
-	return 1;
-}
-
-/*Remove all endline characters from STR*/
-void remove_endline(char **str, int n)
-{
-	for (int i = n - 1; i > 0; i--) {
-		if ((*str)[i] == '\n') {
-			(*str)[i] = '\0';
-		}
-	}
-}
-
-/*Gets input of length LEN frothe number value of itm stdin, prints TEXT to stdout*/
-char *get_input_line(char *text, int len)
-{
-	if (text != NULL) {
-		printf("%s \n", text);
-	}
-	printf("> ");
-
-	size_t size   = len;
-	char *line    = (char *)malloc(sizeof(char *) * len);
-	int charCount = getdelim(&line, &size, '\n', stdin);
-
-	if (charCount < 0) {
-		printf("Skaitymo klaida");
-		return NULL;
-	}
-
-	remove_endline(&line, charCount);
-	return line;
-}
 
 /*Gets input from stdin and transforms it to a number, prints TEXT to stdout*/
 int get_input_number(char *text, int rangeMin, int rangeMax)
@@ -125,7 +82,8 @@ void add(node *head)
 /*Adds entry by pos*/
 void add_pos(node *head)
 {
-	int index = get_input_number("Įterpimo vieta:", 0, list_size(*head) - 1);
+	int size = list_size(*head) - 1;
+	int index = get_input_number("Įterpimo vieta:", 0, size);
 	if (index == -1) {
 		return;
 	}
@@ -140,7 +98,7 @@ void add_pos(node *head)
 	}
 
 	list_insert(head, n, index);
-	printf("Adresas įterptas.");
+	printf("Adresas įterptas.\n");
 	free(line);
 }
 /*Gets entry by pos*/
@@ -155,6 +113,7 @@ void get_pos(node head)
 	printf("%d-oje vietoje esantis įrašas:\n \"%s %s %s %s\"\n", index, found->name, found->surname,
 	       found->phone, found->email);
 }
+
 /*Gets entry by field*/
 void get_field(node head)
 {

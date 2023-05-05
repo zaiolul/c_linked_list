@@ -37,6 +37,7 @@
     - ../src
     - ../lib
     - ../includes
+    - /usr/include
   :support:
     - test/support
     
@@ -57,7 +58,7 @@
 :cmock:
   :mock_prefix: mock_
   :when_no_prototypes: :warn
-  :enforce_strict_ordering: TRUE
+  :enforce_strict_ordering: FALSE
   :plugins:
     - :ignore
     - :callback

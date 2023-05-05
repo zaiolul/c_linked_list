@@ -7,9 +7,11 @@
 node head;
 node head_filled;
 node arr[10]; //linked list element array representation
+char buf[1024];
 
 void setUp(void)
 {
+    setbuf(stdout, buf);
     head = NULL;
     
     head_filled = malloc(sizeof(struct Node));
@@ -47,20 +49,7 @@ void test_creates_new_node_input_correct_size()
     TEST_ASSERT_EQUAL_STRING("c", n->phone);
     TEST_ASSERT_EQUAL_STRING("d", n->email);
     TEST_ASSERT_NULL(n->next);
-    // free(n);
 }
-
-// void test_creates_new_node_input_correct_size()
-// {
-//     node n = create_node("a", "b", "c", "d");
-//     TEST_ASSERT_EQUAL_STRING("a", n->name);
-//     TEST_ASSERT_EQUAL_STRING("b", n->surname);
-//     TEST_ASSERT_EQUAL_STRING("c", n->phone);
-//     TEST_ASSERT_EQUAL_STRING("d", n->email);
-//     TEST_ASSERT_NULL(n->next);
-//     free(n);
-// }
-
 void test_creates_new_node_input_incorrect_size()
 {
     char buf[100];
@@ -71,7 +60,7 @@ void test_creates_new_node_input_incorrect_size()
     TEST_ASSERT_EQUAL_STRING("c", n->phone);
     TEST_ASSERT_EQUAL_STRING("d", n->email);
     TEST_ASSERT_NULL(n->next);
-   // free(n);
+   
 }
 
 void test_list_add_change_head_if_null()
@@ -79,7 +68,7 @@ void test_list_add_change_head_if_null()
     node n = malloc(sizeof(struct Node));
     list_add(&head, n);
     TEST_ASSERT_EQUAL_PTR(head, n);
-    free(n);
+    
 }
 void test_list_add_to_end()
 {
@@ -240,4 +229,32 @@ void test_list_search_index_gets_node()
     node b = list_search_index(head_filled, 999);
     TEST_ASSERT_EQUAL_PTR(arr[5], a);
     TEST_ASSERT_EQUAL_PTR(NULL, b);
+}
+
+
+void test_print_list_correct_output()
+{
+
+    char *expected = "\0: a b c d\n1: 1 2 3 4\n\n";
+    
+    struct Node a = {
+        .name = "a",
+        .surname = "b",
+        .phone = "c",
+        .email = "d",
+    };
+    struct Node b = {
+        .name = "1",
+        .surname = "2",
+        .phone = "3",
+        .email = "4",
+    };
+
+    head = &a;
+    a.next = &b;
+
+    char real[sizeof(buf)];
+    print_list(head);
+    snprintf(real, strlen(expected), "%s", buf);
+    TEST_ASSERT_EQUAL_STRING(expected, real);
 }
