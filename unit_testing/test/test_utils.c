@@ -14,12 +14,11 @@ char real_output[sizeof(out_buf)];
 void setUp(void)
 {
     setbuf(stdout, out_buf);  
-   
 }
 
 void tearDown(void)
 {
-    
+  
 }
 
 void test_create_entry_valid_input()
@@ -53,7 +52,7 @@ void test_create_entry_invalid_input()
 
 void test_get_input_number_valid_text()
 {
-    char *str = malloc(5);
+    char *str = malloc(20);
     strcpy(str, "5");
 
     get_input_line_ExpectAndReturn(NULL, 100, str);
@@ -61,11 +60,12 @@ void test_get_input_number_valid_text()
     int ret = get_input_number("test", 1,10);
 
     TEST_ASSERT_EQUAL_INT(5, ret);
+
 }
 
 void test_get_input_number_valid_text_bad_range()
 {
-    char *str = malloc(5);
+    char *str = malloc(20);
     strcpy(str, "5");
 
     get_input_line_ExpectAndReturn(NULL, 100, str);
@@ -73,11 +73,12 @@ void test_get_input_number_valid_text_bad_range()
     int ret = get_input_number("test", 8,10);
 
     TEST_ASSERT_EQUAL_INT(-1, ret);
+
 }
 
 void test_get_input_number_invalid_text()
 {
-    char *str = malloc(10);
+    char *str = malloc(20);
     strcpy(str, "5ab");
 
     get_input_line_ExpectAndReturn(NULL, 100, str);
@@ -85,14 +86,13 @@ void test_get_input_number_invalid_text()
     int ret = get_input_number("test", 1,10);
 
     TEST_ASSERT_EQUAL_INT(-1, ret);
+    
 }
 
 void test_add_valid_input()
 {
-    char real_output[sizeof(out_buf)];
-
-    node head = NULL;
     char *str = malloc(20);
+    node head = NULL;
     strcpy(str, "a b c d");
     get_input_line_ExpectAndReturn("Įvesti adreso duomenis (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n",
      100, str);
@@ -111,13 +111,12 @@ void test_add_valid_input()
 
 void test_add_invalid_input()
 {
-    node head = NULL;
     char *str = malloc(20);
+    node head = NULL;
     strcpy(str, "a b c");
     get_input_line_ExpectAndReturn("Įvesti adreso duomenis (formatas: [vardas] [pavardė] [tel. nr] [paštas])\n",
         100, str);
 
-    struct Node n = {0};
     //returns before changing linked list
     add(&head);
 
@@ -128,13 +127,12 @@ void test_add_invalid_input()
 
 void test_add_pos_valid_input()
 {
-    node head = NULL;
-
     char *str = malloc(20);
     char *num = malloc(5);
+    node head = NULL;
+
     strcpy(str, "a b c d");
     strcpy(num, "0");
-
     
     check_number_ExpectAndReturn(num, 1);
     list_size_ExpectAndReturn(head, 1);
@@ -158,10 +156,10 @@ void test_add_pos_valid_input()
 
 void test_add_pos_invalid_input_bad_entry()
 {
-    node head = NULL;
-
     char *str = malloc(20);
     char *num = malloc(5);
+    node head = NULL;
+
     strcpy(str, "a b"); // bad string
     strcpy(num, "0");
 
@@ -181,11 +179,11 @@ void test_add_pos_invalid_input_bad_entry()
 
 void test_add_pos_invalid_input_bad_index()
 {
+    char *str = malloc(20);
+    char *num = malloc(5);
     node n;
     node head = NULL;
 
-    char *str = malloc(20);
-    char *num = malloc(5);
     strcpy(str, "a b c d");
     strcpy(num, "999");
     
@@ -240,8 +238,8 @@ void test_delete_pos_list_empty()
 
 void test_delete_pos_valid_index()
 {
-    node head = NULL;
     char *num = malloc(5);
+    node head = NULL;
     strcpy(num, "5");
 
     list_size_ExpectAndReturn(head, 10);
@@ -284,8 +282,9 @@ void get_field_entries_found()
 
 void test_delete_pos_invalid_index()
 {
-    node head = NULL;
+    
     char *num = malloc(5);
+    node head = NULL;
     strcpy(num, "99");
 
     list_size_ExpectAndReturn(head, 10);
